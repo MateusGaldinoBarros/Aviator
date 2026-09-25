@@ -1,6 +1,6 @@
 package com.aviator.aviator.handler;
 
-import com.aviator.aviator.Service.AviaoService;
+import com.aviator.aviator.service.AviaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;

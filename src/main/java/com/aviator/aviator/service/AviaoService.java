@@ -1,4 +1,4 @@
-package com.aviator.aviator.Service;
+package com.aviator.aviator.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -22,11 +22,16 @@ public class AviaoService {
         pontoDeCrash = 1+(Math.random()*9);
 
         rodada = scheduler.scheduleAtFixedRate(() -> {
-            multiplicador += 0.1;
+            multiplicador += 0.01;
 
-            if (multiplicador >= pontoDeCrash) {
+        if (multiplicador >= pontoDeCrash) {
                 rodada.cancel(false);
+            try {
+                session.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+        }
             try {
                 session.sendMessage(new TextMessage(String.valueOf(multiplicador)));
             } catch (IOException e) {
