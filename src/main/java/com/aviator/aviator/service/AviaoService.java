@@ -26,6 +26,12 @@ public class AviaoService {
 
             if(multiplicador >=pontoDeCrash) {
                 rodada.cancel(true);
+
+                jogo = scheduler.schedule(() -> {
+                    iniciarRodada(session);
+                },5,TimeUnit.SECONDS);
+
+                return;
             }
 
             try {
