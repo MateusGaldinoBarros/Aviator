@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 public class AviaoService {
 
     private double multiplicador, pontoDeCrash;
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    public ScheduledFuture<?> rodada;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+    public ScheduledFuture<?> rodada,jogo;
 
     public void iniciarRodada(WebSocketSession session) {
         multiplicador = 1.0;
@@ -24,19 +24,15 @@ public class AviaoService {
         rodada = scheduler.scheduleAtFixedRate(() -> {
             multiplicador += 0.01;
 
-        if (multiplicador >= pontoDeCrash) {
-                rodada.cancel(false);
+            if(multiplicador >=pontoDeCrash) {
+                rodada.cancel(true);
+            }
+
             try {
-                session.close();
+                session.sendMessage(new TextMessage((String.valueOf(multiplicador))));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-            try {
-                session.sendMessage(new TextMessage(String.valueOf(multiplicador)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }, 0, 100, TimeUnit.MILLISECONDS);
+        },0,100,TimeUnit.MILLISECONDS);
     }
 }

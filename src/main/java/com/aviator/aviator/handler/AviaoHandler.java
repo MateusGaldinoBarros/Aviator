@@ -20,6 +20,6 @@ public class AviaoHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        // sem lógica por enquanto — só um jogador testando
+
     }
 }
