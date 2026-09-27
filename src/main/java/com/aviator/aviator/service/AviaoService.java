@@ -24,18 +24,29 @@ public class AviaoService {
         rodada = scheduler.scheduleAtFixedRate(() -> {
             multiplicador += 0.01;
 
-            if(multiplicador >=pontoDeCrash) {
+            if(multiplicador >=2) {
+                try {
+                    session.sendMessage(new TextMessage(
+                            """
+                                    {"tipo":"CRASH"}
+                                    """
+                    ));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 rodada.cancel(true);
 
                 jogo = scheduler.schedule(() -> {
                     iniciarRodada(session);
-                },5,TimeUnit.SECONDS);
+                },1,TimeUnit.SECONDS);
 
                 return;
             }
 
             try {
-                session.sendMessage(new TextMessage((String.valueOf(multiplicador))));
+                session.sendMessage(new TextMessage("""
+                        {"tipo": "numero","valor":"""+multiplicador+ """
+                        }"""));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
