@@ -24,7 +24,7 @@ public class AviaoService {
         rodada = scheduler.scheduleAtFixedRate(() -> {
             multiplicador += 0.01;
 
-            if(multiplicador >=2) {
+            if(multiplicador >=pontoDeCrash) {
                 try {
                     session.sendMessage(new TextMessage(
                             """
@@ -38,7 +38,7 @@ public class AviaoService {
 
                 jogo = scheduler.schedule(() -> {
                     iniciarRodada(session);
-                },1,TimeUnit.SECONDS);
+                },5,TimeUnit.SECONDS);
 
                 return;
             }
